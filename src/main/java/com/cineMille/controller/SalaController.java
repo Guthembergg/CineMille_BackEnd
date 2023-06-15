@@ -41,7 +41,7 @@ public class SalaController {
 		}
 	}
 	
-	@GetMapping()
+	@GetMapping("/nome")
 	public ResponseEntity<?> trovaSalaByNome(@RequestBody String nome){
 		try {
 			return new ResponseEntity<>(service.findSalabyNome(nome), HttpStatus.OK);
@@ -49,7 +49,7 @@ public class SalaController {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
 		}
 	}
-	@GetMapping()
+	@GetMapping("/tipo")
 	public ResponseEntity<?> trovaSalaByTipo(@RequestBody TipoSala tipo){
 		try {
 			return new ResponseEntity<>(service.findSalabyTipo(tipo), HttpStatus.OK);

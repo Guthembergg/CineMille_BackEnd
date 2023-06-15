@@ -2,6 +2,7 @@ package com.cineMille.service;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,19 +38,19 @@ public class ProgrammazioneService {
 		}
 		return repo.findProgrammazioneByData(data);
 	}
-	public List<Programmazione> findAllbyOrario1(SimpleDateFormat orario) {
+	public List<Programmazione> findAllbyOrario1(LocalTime orario) {
 		if (repo.findProgrammazioneByOrario1(orario).isEmpty()) {
 			throw new EntityNotFoundException("Nessuna programmazione con questo orario1");
 		}
 		return repo.findProgrammazioneByOrario1(orario);
 	}
-	public List<Programmazione> findAllbyOrario2(SimpleDateFormat orario) {
+	public List<Programmazione> findAllbyOrario2(LocalTime orario) {
 		if (repo.findProgrammazioneByOrario2(orario).isEmpty()) {
 			throw new EntityNotFoundException("Nessuna programmazione con questo orario2");
 		}
 		return repo.findProgrammazioneByOrario2(orario);
 	}	
-	public List<Programmazione> findAllbyOrario3(SimpleDateFormat orario) {
+	public List<Programmazione> findAllbyOrario3(LocalTime orario) {
 		if (repo.findProgrammazioneByOrario3(orario).isEmpty()) {
 			throw new EntityNotFoundException("Nessuna programmazione con questo orario3");
 		}

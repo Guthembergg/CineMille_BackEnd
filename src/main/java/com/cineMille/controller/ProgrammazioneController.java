@@ -2,6 +2,10 @@ package com.cineMille.controller;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cineMille.model.Film;
 import com.cineMille.model.Programmazione;
+import com.cineMille.model.ProgrammazioneDto;
 import com.cineMille.service.FilmService;
 import com.cineMille.service.ProgrammazioneService;
 import com.cineMille.service.SalaService;
@@ -27,92 +32,130 @@ import com.cineMille.service.SalaService;
 @RestController
 @RequestMapping("/programmazione")
 public class ProgrammazioneController {
-	@Autowired ProgrammazioneService service;
-	@Autowired FilmService serviceF;
-	@Autowired SalaService serviceS;
+	@Autowired
+	ProgrammazioneService service;
+	@Autowired
+	FilmService serviceF;
+	@Autowired
+	SalaService serviceS;
+
 	@GetMapping
-	public ResponseEntity<?> recuperaALLProgrammazione(){
+	public ResponseEntity<?> recuperaALLProgrammazione() {
 		return new ResponseEntity<>(service.findAllProgrammazione(), HttpStatus.OK);
 	}
+
 	@GetMapping("/{id}")
-	public ResponseEntity<?> trovaProgrammazioneById(@PathVariable Long id){
+	public ResponseEntity<?> trovaProgrammazioneById(@PathVariable Long id) {
 		try {
 			return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
 		}
 	}
-	@GetMapping()
-	public ResponseEntity<?> trovaProgrammazioneByData(@RequestBody LocalDate data){
+
+	@GetMapping("/data")
+	public ResponseEntity<?> trovaProgrammazioneByData(@RequestBody LocalDate data) {
 		try {
 			return new ResponseEntity<>(service.findAllbyData(data), HttpStatus.OK);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
 		}
 	}
-	@GetMapping()
-	public ResponseEntity<?> trovaProgrammazioneByOrario1(@RequestBody SimpleDateFormat orario1){
+
+	@GetMapping("/orario1/{orario1}")
+	public ResponseEntity<?> trovaProgrammazioneByOrario1(@PathVariable String orario1) {
 		try {
-			return new ResponseEntity<>(service.findAllbyOrario1(orario1), HttpStatus.OK);
-		} catch(Exception e) {
+			LocalTime time = LocalTime.parse(orario1);
+			LocalTime Time = LocalDateTime.of(LocalDate.now(), time).atZone(ZoneId.of("Italy")).toLocalTime();
+
+			return new ResponseEntity<>(service.findAllbyOrario1(Time), HttpStatus.OK);
+		} catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
 		}
 	}
-	@GetMapping()
-	public ResponseEntity<?> trovaProgrammazioneByOrario2(@RequestBody SimpleDateFormat orario2){
+
+	@GetMapping("/orario2/{orario2}")
+	public ResponseEntity<?> trovaProgrammazioneByOrario2(@RequestBody String orario2) {
 		try {
-			return new ResponseEntity<>(service.findAllbyOrario2(orario2), HttpStatus.OK);
-		} catch(Exception e) {
+			LocalTime time = LocalTime.parse(orario2);
+			LocalTime Time = LocalDateTime.of(LocalDate.now(), time).atZone(ZoneId.of("Italy")).toLocalTime();
+
+			return new ResponseEntity<>(service.findAllbyOrario2(Time), HttpStatus.OK);
+		} catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
 		}
 	}
-	@GetMapping()
-	public ResponseEntity<?> trovaProgrammazioneByOrario3(@RequestBody SimpleDateFormat orario3){
+
+	@GetMapping("/orario3/{orario3}")
+	public ResponseEntity<?> trovaProgrammazioneByOrario3(@PathVariable String orario3) {
 		try {
-			return new ResponseEntity<>(service.findAllbyOrario3(orario3), HttpStatus.OK);
-		} catch(Exception e) {
+			LocalTime time = LocalTime.parse(orario3);
+			LocalTime Time = LocalDateTime.of(LocalDate.now(), time).atZone(ZoneId.of("Italy")).toLocalTime();
+
+			return new ResponseEntity<>(service.findAllbyOrario3(Time), HttpStatus.OK);
+		} catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
 		}
 	}
-	
+
 	@PostMapping("/{id_film}/{id_sala}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> aggiungiProgrammazione(@RequestBody Programmazione p,@PathVariable Long id_film,@PathVariable Long id_sala){
-		LocalDate data_uscita=serviceF.findById(id_film).getData_uscita();
-		LocalDate data_programma=p.getData();
-		if(data_uscita.datesUntil(data_programma).count() > 22 && data_uscita.datesUntil(data_programma).count()<7) {
-			return new ResponseEntity<String>("Data fuori programma rispetto alla data di uscita del film", HttpStatus.BAD_REQUEST);
+	public ResponseEntity<?> aggiungiProgrammazione(@RequestBody ProgrammazioneDto p, @PathVariable Long id_film,
+			@PathVariable Long id_sala) {
+		LocalDate data_uscita = serviceF.findById(id_film).getDatauscita();
+		LocalDate data_programma = p.getData();
+		if (data_uscita.datesUntil(data_programma).count() > 22 && data_uscita.datesUntil(data_programma).count() < 7) {
+			return new ResponseEntity<String>("Data fuori programma rispetto alla data di uscita del film",
+					HttpStatus.BAD_REQUEST);
 		}
-		
+		LocalTime time1 = LocalTime.parse(p.getOrario1());
+		LocalTime time2 = LocalTime.parse(p.getOrario2());
+		LocalTime time3 = LocalTime.parse(p.getOrario3());
+		LocalTime Time1 = LocalDateTime.of(LocalDate.now(), time1).atZone(ZoneId.of("Italy")).toLocalTime();
+
+		LocalTime Time2 = LocalDateTime.of(LocalDate.now(), time2).atZone(ZoneId.of("Italy")).toLocalTime();
+
+		LocalTime Time3 = LocalDateTime.of(LocalDate.now(), time3).atZone(ZoneId.of("Italy")).toLocalTime();
+
 		try {
-			p.setSala(serviceS.findById(id_sala));
-			p.setFilm(serviceF.findById(id_film));
-			return new ResponseEntity<>(service.addProgrammazione(p), HttpStatus.CREATED);			
-		} catch(Exception e) {
+			Programmazione p2 = new Programmazione(p.getTitolo(), p.getData(), Time1, Time2, Time3,
+					serviceF.findById(id_film), serviceS.findById(id_sala));
+			return new ResponseEntity<>(service.addProgrammazione(p2), HttpStatus.CREATED);
+		} catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
+
 	@PutMapping("/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> modificaProgrammazione(@RequestBody Programmazione p, @PathVariable Long id){
+	public ResponseEntity<?> modificaProgrammazione(@RequestBody ProgrammazioneDto p, @PathVariable Long id) {
+		LocalTime time1 = LocalTime.parse(p.getOrario1());
+		LocalTime time2 = LocalTime.parse(p.getOrario2());
+		LocalTime time3 = LocalTime.parse(p.getOrario3());
+		LocalTime Time1 = LocalDateTime.of(LocalDate.now(), time1).atZone(ZoneId.of("Italy")).toLocalTime();
+
+		LocalTime Time2 = LocalDateTime.of(LocalDate.now(), time2).atZone(ZoneId.of("Italy")).toLocalTime();
+
+		LocalTime Time3 = LocalDateTime.of(LocalDate.now(), time3).atZone(ZoneId.of("Italy")).toLocalTime();
 		try {
-			p.setId(id);
-			p.setFilm(service.findById(id).getFilm());
-			p.setSala(service.findById(id).getSala());
-		return new ResponseEntity<Programmazione>(service.editProgrammazione(p), HttpStatus.CREATED);
-			
+			Programmazione p2 = new Programmazione(id, p.getTitolo(), p.getData(), Time1, Time2, Time3,
+					service.findById(id).getFilm(), service.findById(id).getSala());
+
+			return new ResponseEntity<Programmazione>(service.editProgrammazione(p2), HttpStatus.CREATED);
+
 		} catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
-		}		 
-	}
-	@DeleteMapping("/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> eliminaProgrammazione(@PathVariable Long id){
-		try {
-			return new ResponseEntity<>(service.deleteProgrammazioneById(id), HttpStatus.OK);
-		} catch(Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
 		}
 	}
-	
+
+	@DeleteMapping("/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<?> eliminaProgrammazione(@PathVariable Long id) {
+		try {
+			return new ResponseEntity<>(service.deleteProgrammazioneById(id), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
+		}
+	}
+
 }

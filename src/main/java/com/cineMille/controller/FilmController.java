@@ -40,8 +40,8 @@ public class FilmController {
 		}
 	}
 	
-	@GetMapping()
-	public ResponseEntity<?> trovaFilmByData(@RequestBody LocalDate data){
+	@GetMapping("/data/{data}")
+	public ResponseEntity<?> trovaFilmByData(@PathVariable LocalDate data){
 		try {
 			return new ResponseEntity<>(service.findByData(data), HttpStatus.OK);
 		} catch(Exception e) {
@@ -49,7 +49,7 @@ public class FilmController {
 		}
 	}
 	@GetMapping("titolo/{titolo}")
-	public ResponseEntity<?> trovaFilmByData(@PathVariable String titolo){
+	public ResponseEntity<?> trovaFilmByTitolo(@PathVariable String titolo){
 		try {
 			return new ResponseEntity<>(service.findByTitolo(titolo), HttpStatus.OK);
 		} catch(Exception e) {

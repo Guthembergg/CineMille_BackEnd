@@ -38,7 +38,7 @@ public class Film {
     @Column(nullable = true,length = 256)
     private String immagine;
     @Column(nullable = false)
-    private LocalDate data_uscita;
+    private LocalDate datauscita;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE, mappedBy = "film")
     @JsonIgnore
     private List<Programmazione> programmazioni= new ArrayList<>();
@@ -46,7 +46,7 @@ public class Film {
 		super();
 		this.titolo = titolo;
 		this.immagine = immagine;
-		this.data_uscita = data_uscita;
+		this.datauscita = data_uscita;
 	}
     
 }

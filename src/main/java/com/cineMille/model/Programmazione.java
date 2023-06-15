@@ -2,6 +2,7 @@ package com.cineMille.model;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -36,20 +37,21 @@ public class Programmazione {
     @Column(nullable = false)
     private LocalDate data;
     @Column(nullable = false)
-    private SimpleDateFormat orario1 = new SimpleDateFormat("HH");
+    private LocalTime orario1 ;
     @Column(nullable = true)
-    private SimpleDateFormat orario2 = new SimpleDateFormat("HH");
+    private LocalTime orario2;
     @Column(nullable = true)
-    private SimpleDateFormat orario3 = new SimpleDateFormat("HH");
-    @Column(nullable = true)
+    private LocalTime orario3;
+    
+ 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JsonIgnore
     private Film film;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JsonIgnore
     private Sala sala;
-	public Programmazione(String titolo, LocalDate data, SimpleDateFormat orario1, SimpleDateFormat orario2,
-			SimpleDateFormat orario3, Film film, Sala sala) {
+	public Programmazione(String titolo, LocalDate data, LocalTime orario1, LocalTime orario2,
+			LocalTime orario3, Film film, Sala sala) {
 		super();
 		this.titolo = titolo;
 		this.data = data;

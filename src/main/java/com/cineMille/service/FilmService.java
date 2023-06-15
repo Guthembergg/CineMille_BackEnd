@@ -53,10 +53,10 @@ public class FilmService {
 		
 	}	
 	public List<Film> findByData(LocalDate data) {
-		if (repo.findFilmByData_uscita(data).isEmpty()) {
+		if (repo.findFilmByDatauscita(data).isEmpty()) {
 			throw new EntityNotFoundException("Nessun film con questa data");
 		}
-		return repo.findFilmByData_uscita(data);
+		return repo.findFilmByDatauscita(data);
 	}
 
 	public String deleteFilmById(Long id) {

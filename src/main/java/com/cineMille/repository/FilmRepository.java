@@ -11,5 +11,5 @@ import com.cineMille.model.Film;
 @Repository
 public interface FilmRepository  extends JpaRepository<Film, Long>, PagingAndSortingRepository<Film, Long> {
 	 List<Film> findFilmByTitolo(String titolo);
-	 List<Film> findFilmByData_uscita(LocalDate data_uscita);
+	 List<Film> findFilmByDatauscita(LocalDate datauscita);
 }
