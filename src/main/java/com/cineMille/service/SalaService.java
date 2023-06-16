@@ -66,6 +66,10 @@ public class SalaService {
 
 		repo.save(sala);
 		return "Sala aggiunta";
+	}	public String addAllSala(List<Sala> sala) {
+
+		repo.saveAll(sala);
+		return "Sale aggiunte";
 	}
 
 	public void saveCSV(MultipartFile file) {

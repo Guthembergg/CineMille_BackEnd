@@ -50,5 +50,12 @@ public class Sala {
 		this.tipo = tipo;
 		this.posti = posti;
 	}
+	public Sala(Long id, String nome, TipoSala tipo, int posti) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.tipo = tipo;
+		this.posti = posti;
+	}
     
 }
