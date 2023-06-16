@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cineMille.model.Film;
 import com.cineMille.model.Programmazione;
@@ -66,7 +68,7 @@ public class ProgrammazioneController {
 	public ResponseEntity<?> trovaProgrammazioneByOrario1(@PathVariable String orario1) {
 		try {
 			LocalTime time = LocalTime.parse(orario1);
-			LocalTime Time = LocalDateTime.of(LocalDate.now(), time).atZone(ZoneId.of("Italy")).toLocalTime();
+			LocalTime Time = LocalDateTime.of(LocalDate.now(), time).atZone(ZoneId.of("Europe/Paris")).toLocalTime();
 
 			return new ResponseEntity<>(service.findAllbyOrario1(Time), HttpStatus.OK);
 		} catch (Exception e) {
@@ -78,7 +80,7 @@ public class ProgrammazioneController {
 	public ResponseEntity<?> trovaProgrammazioneByOrario2(@RequestBody String orario2) {
 		try {
 			LocalTime time = LocalTime.parse(orario2);
-			LocalTime Time = LocalDateTime.of(LocalDate.now(), time).atZone(ZoneId.of("Italy")).toLocalTime();
+			LocalTime Time = LocalDateTime.of(LocalDate.now(), time).atZone(ZoneId.of("Europe/Paris")).toLocalTime();
 
 			return new ResponseEntity<>(service.findAllbyOrario2(Time), HttpStatus.OK);
 		} catch (Exception e) {
@@ -90,7 +92,7 @@ public class ProgrammazioneController {
 	public ResponseEntity<?> trovaProgrammazioneByOrario3(@PathVariable String orario3) {
 		try {
 			LocalTime time = LocalTime.parse(orario3);
-			LocalTime Time = LocalDateTime.of(LocalDate.now(), time).atZone(ZoneId.of("Italy")).toLocalTime();
+			LocalTime Time = LocalDateTime.of(LocalDate.now(), time).atZone(ZoneId.of("Europe/Paris")).toLocalTime();
 
 			return new ResponseEntity<>(service.findAllbyOrario3(Time), HttpStatus.OK);
 		} catch (Exception e) {
@@ -104,18 +106,18 @@ public class ProgrammazioneController {
 			@PathVariable Long id_sala) {
 		LocalDate data_uscita = serviceF.findById(id_film).getDatauscita();
 		LocalDate data_programma = p.getData();
-		if (data_uscita.datesUntil(data_programma).count() > 22 && data_uscita.datesUntil(data_programma).count() < 7) {
+		if (data_uscita.datesUntil(data_programma).count() > 22 || data_uscita.datesUntil(data_programma).count() < 7) {
 			return new ResponseEntity<String>("Data fuori programma rispetto alla data di uscita del film",
 					HttpStatus.BAD_REQUEST);
 		}
 		LocalTime time1 = LocalTime.parse(p.getOrario1());
 		LocalTime time2 = LocalTime.parse(p.getOrario2());
 		LocalTime time3 = LocalTime.parse(p.getOrario3());
-		LocalTime Time1 = LocalDateTime.of(LocalDate.now(), time1).atZone(ZoneId.of("Italy")).toLocalTime();
+		LocalTime Time1 = LocalDateTime.of(LocalDate.now(), time1).atZone(ZoneId.of("Europe/Paris")).toLocalTime();
 
-		LocalTime Time2 = LocalDateTime.of(LocalDate.now(), time2).atZone(ZoneId.of("Italy")).toLocalTime();
+		LocalTime Time2 = LocalDateTime.of(LocalDate.now(), time2).atZone(ZoneId.of("Europe/Paris")).toLocalTime();
 
-		LocalTime Time3 = LocalDateTime.of(LocalDate.now(), time3).atZone(ZoneId.of("Italy")).toLocalTime();
+		LocalTime Time3 = LocalDateTime.of(LocalDate.now(), time3).atZone(ZoneId.of("Europe/Paris")).toLocalTime();
 
 		try {
 			Programmazione p2 = new Programmazione(p.getTitolo(), p.getData(), Time1, Time2, Time3,
@@ -132,11 +134,11 @@ public class ProgrammazioneController {
 		LocalTime time1 = LocalTime.parse(p.getOrario1());
 		LocalTime time2 = LocalTime.parse(p.getOrario2());
 		LocalTime time3 = LocalTime.parse(p.getOrario3());
-		LocalTime Time1 = LocalDateTime.of(LocalDate.now(), time1).atZone(ZoneId.of("Italy")).toLocalTime();
+		LocalTime Time1 = LocalDateTime.of(LocalDate.now(), time1).atZone(ZoneId.of("Europe/Paris")).toLocalTime();
 
-		LocalTime Time2 = LocalDateTime.of(LocalDate.now(), time2).atZone(ZoneId.of("Italy")).toLocalTime();
+		LocalTime Time2 = LocalDateTime.of(LocalDate.now(), time2).atZone(ZoneId.of("Europe/Paris")).toLocalTime();
 
-		LocalTime Time3 = LocalDateTime.of(LocalDate.now(), time3).atZone(ZoneId.of("Italy")).toLocalTime();
+		LocalTime Time3 = LocalDateTime.of(LocalDate.now(), time3).atZone(ZoneId.of("Europe/Paris")).toLocalTime();
 		try {
 			Programmazione p2 = new Programmazione(id, p.getTitolo(), p.getData(), Time1, Time2, Time3,
 					service.findById(id).getFilm(), service.findById(id).getSala());
@@ -157,5 +159,20 @@ public class ProgrammazioneController {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
 		}
 	}
+	@PostMapping("/upload")	
+	@PreAuthorize("hasRole('ADMIN')")
+	  public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
+	    String message = "";
 
+	      try {
+	        service.saveCSV(file);
+
+	        message = "Uploaded the file successfully: " + file.getOriginalFilename();
+	        return new ResponseEntity<String>(message, HttpStatus.OK);
+	      
+	      } catch (Exception e) {
+	        return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
+	      }
+	    
+	}
 }

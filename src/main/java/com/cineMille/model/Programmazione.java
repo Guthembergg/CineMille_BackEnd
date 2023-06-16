@@ -38,9 +38,9 @@ public class Programmazione {
     private LocalDate data;
     @Column(nullable = false)
     private LocalTime orario1 ;
-    @Column(nullable = true)
+    @Column(nullable = false)
     private LocalTime orario2;
-    @Column(nullable = true)
+    @Column(nullable = false)
     private LocalTime orario3;
     
  

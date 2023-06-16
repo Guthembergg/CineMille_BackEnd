@@ -1,5 +1,6 @@
 package com.cineMille.service;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -9,10 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.cineMille.model.Film;
 import com.cineMille.model.Programmazione;
 import com.cineMille.model.Sala;
 import com.cineMille.model.TipoSala;
+import com.cineMille.read_CSV.CSVHelper;
 import com.cineMille.repository.ProgrammazioneRepository;
 import com.cineMille.repository.SalaRepository;
 
@@ -77,7 +81,18 @@ public class ProgrammazioneService {
 		repo.deleteById(id);
 		return "Programmazione eliminata";
 	}
+	public void saveCSV(MultipartFile file) {
+		List<Programmazione> programmazioni;
+		try {
+			programmazioni = CSVHelper.csvToProgrammazione(file.getInputStream());
 
+			repo.saveAll(programmazioni);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
 	public String addProgrammazione(Programmazione p) {
 
 		repo.save(p);

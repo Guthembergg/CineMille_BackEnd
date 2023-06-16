@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cineMille.model.Film;
 import com.cineMille.model.Sala;
@@ -86,5 +88,21 @@ public class SalaController {
 		} catch(Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
 		}
+	}
+	@PostMapping("/upload")	
+	@PreAuthorize("hasRole('ADMIN')")
+	  public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
+	    String message = "";
+
+	      try {
+	        service.saveCSV(file);
+
+	        message = "Uploaded the file successfully: " + file.getOriginalFilename();
+	        return new ResponseEntity<String>(message, HttpStatus.OK);
+	      
+	      } catch (Exception e) {
+	        return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
+	      }
+	    
 	}
 }
