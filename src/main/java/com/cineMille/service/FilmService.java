@@ -43,6 +43,15 @@ public class FilmService {
 			return repo.findAll(pageable);
 	}
 
+	
+	public List<Film> getAllFilmDisponibili(LocalDate data1, LocalDate data2 ) {
+		if (repo.findByDataDisponibile(data1, data2).isEmpty()) {
+			throw new EntityNotFoundException("Nessun film disponibile con data di uscita tra una settimana e tre settimane");
+		} else
+			return repo.findByDataDisponibile(data1, data2);
+	}
+	
+	
 	public Film findById(Long id) {
 		if (!repo.existsById(id)) {
 			throw new EntityNotFoundException("Nessun film associato a questo ID");

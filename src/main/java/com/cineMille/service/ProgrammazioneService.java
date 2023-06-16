@@ -52,7 +52,12 @@ public class ProgrammazioneService {
 		}
 		return repo.findProgrammazioneByTitolo(nome);
 	}
-
+	public List<Programmazione> findByTitoloFilm(String titolo) {
+		if (repo.findProgrammazioneByTitoloFilm(titolo).isEmpty()) {
+			throw new EntityNotFoundException("Nessuna programmazione con questo titolo film");
+		}
+		return repo.findProgrammazioneByTitoloFilm(titolo);
+	}
 	public List<Programmazione> findAllbyData(LocalDate data) {
 		if (repo.findProgrammazioneByData(data).isEmpty()) {
 			throw new EntityNotFoundException("Nessuna programmazione con questa data");

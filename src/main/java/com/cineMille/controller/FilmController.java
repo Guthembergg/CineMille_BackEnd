@@ -58,6 +58,15 @@ public class FilmController {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
 		}
 	}
+	@GetMapping("/disponibile")
+	public ResponseEntity<?> trovaFilmDisponibili(){
+		try {
+			  LocalDate oggi= LocalDate.now();
+			return new ResponseEntity<>(service.getAllFilmDisponibili(oggi.plusDays(7), oggi.plusDays(22)), HttpStatus.OK);
+		} catch(Exception e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
+		}
+	}
 	
 	@PostMapping()
 	@PreAuthorize("hasRole('ADMIN')")

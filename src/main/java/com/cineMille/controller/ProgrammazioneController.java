@@ -62,6 +62,14 @@ public class ProgrammazioneController {
 		} catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
 		}
+	}	
+	@GetMapping("/titoloFilm/{titolo}")
+	public ResponseEntity<?> trovaProgrammazioneByData(@PathVariable String titolo) {
+		try {
+			return new ResponseEntity<>(service.findByTitoloFilm(titolo), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
+		}
 	}
 
 	@GetMapping("/orario1/{orario1}")

@@ -41,7 +41,7 @@ public class Sala {
     private TipoSala tipo;
     @Column(nullable = false)
     private int posti;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE, mappedBy = "sala")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, mappedBy = "sala")
     @JsonIgnore
     private List<Programmazione> programmazioni= new ArrayList<>();
 	public Sala(String nome, TipoSala tipo, int posti) {

@@ -39,7 +39,7 @@ public class Film {
     private String immagine;
     @Column(nullable = false)
     private LocalDate datauscita;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE, mappedBy = "film")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, mappedBy = "film")
     @JsonIgnore
     private List<Programmazione> programmazioni= new ArrayList<>();
 	public Film(String titolo, String immagine, LocalDate data_uscita) {
