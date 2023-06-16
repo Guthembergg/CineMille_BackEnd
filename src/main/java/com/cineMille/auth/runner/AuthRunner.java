@@ -38,7 +38,8 @@ public class AuthRunner implements ApplicationRunner {
 	public void run(ApplicationArguments args) throws Exception {
 		System.out.println("Run...");
 		if(roleRepository.findAll().size() == 0) {
-			setRoleDefault();			
+			setRoleDefault();	
+			System.out.println("Ruoli creati");
 		}
 		
 		if(userRepository.findAll().size() == 0) {
@@ -50,6 +51,7 @@ public class AuthRunner implements ApplicationRunner {
 			Role admin = roleRepository.findById(1l).get();			
 			user.getRoles().add(admin);
 			userRepository.save(user);
+			System.out.println("Admin Mario creato");
 		}
 	}
 	
