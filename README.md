@@ -1,0 +1,5 @@
+BackEnd per la gestione di CineMille Creare un’applicazione web per la gestione dei film di un multisala. L’applicazione permettere la visualizzazione della lista dei film messi in programmazione in un cinema multisala, al fine di organizzare uno storico consultabile dai gestori.
+Con la possibilità di caricare dati da file CSV (film, sale, programmazioni) e l'autentichation degli user compreso di limitazioni agli admin dei metodi di aggiunta, modifica e cancellazione di film,sale e programmazioni.
+All'avvio viene riempita la tabelle degli ruoli degli user (user, mod, admin), viene creato uno User admin username: mario e psw:qwerty, inoltre vengono create 12 sale di vario tipo come da consegna.
+Ogni film ha una data di uiscita, le programmazioni possono essere fatte a partire da una settimana da questa data ed entro le tre settimane come da consegna. Per via di questa limitazione è possibile vedere i film che sono attualmente disponibili ad essere messi in programmazione mediante query ed una rotta specifica /film/disponibile.
+E' inoltre possbile ricercare film per titolo, data con la possibilità di avere una paginazione.
