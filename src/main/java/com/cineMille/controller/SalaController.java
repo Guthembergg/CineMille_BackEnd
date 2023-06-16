@@ -43,18 +43,18 @@ public class SalaController {
 		}
 	}
 	
-	@GetMapping("/nome")
-	public ResponseEntity<?> trovaSalaByNome(@RequestBody String nome){
+	@GetMapping("/nome/{nome}")
+	public ResponseEntity<?> trovaSalaByNome(@PathVariable String nome){
 		try {
 			return new ResponseEntity<>(service.findSalabyNome(nome), HttpStatus.OK);
 		} catch(Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
 		}
 	}
-	@GetMapping("/tipo")
-	public ResponseEntity<?> trovaSalaByTipo(@RequestBody TipoSala tipo){
+	@GetMapping("/tipo/{tipo}")
+	public ResponseEntity<?> trovaSalaByTipo(@PathVariable String tipo){
 		try {
-			return new ResponseEntity<>(service.findSalabyTipo(tipo), HttpStatus.OK);
+			return new ResponseEntity<>(service.findSalabyTipo(TipoSala.valueOf(tipo)), HttpStatus.OK);
 		} catch(Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
 		}
