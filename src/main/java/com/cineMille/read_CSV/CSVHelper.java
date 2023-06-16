@@ -17,6 +17,8 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -33,11 +35,12 @@ import com.cineMille.service.SalaService;
 public class CSVHelper {
 
 	@Autowired
-	public static FilmService servF;
-	@Autowired
-	public static SalaService servS;
-	public static String TYPE = "text/csv";
+	
+	static FilmService servF;
 
+	@Autowired 
+	static SalaService servS;
+	public static String TYPE = "text/csv";
 
 	public static boolean hasCSVFormat(MultipartFile file) {
 
@@ -61,8 +64,7 @@ public class CSVHelper {
 			Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
 			for (CSVRecord csvRecord : csvRecords) {
-				Film film = new Film( csvRecord.get(0), csvRecord.get(1),
-						LocalDate.parse(csvRecord.get(2))
+				Film film = new Film(csvRecord.get(0), csvRecord.get(1), LocalDate.parse(csvRecord.get(2))
 
 				);
 
@@ -84,12 +86,12 @@ public class CSVHelper {
 						.withIgnoreHeaderCase().withTrim().withAllowMissingColumnNames());) {
 
 			List<Sala> sale = new ArrayList<Sala>();
-				
+
 			Iterable<CSVRecord> csvRecords = csvParser.getRecords();
 
 			for (CSVRecord csvRecord : csvRecords) {
-				Sala sala = new Sala( csvRecord.get(0),TipoSala.valueOf(csvRecord.get(1)) ,Integer.parseInt(csvRecord.get(2))
-						
+				Sala sala = new Sala(csvRecord.get(0), TipoSala.valueOf(csvRecord.get(1)),
+						Integer.parseInt(csvRecord.get(2))
 
 				);
 
@@ -101,40 +103,47 @@ public class CSVHelper {
 			throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
 		}
 
-	}public static List<Programmazione> csvToProgrammazione(InputStream is) {// InputStream is
-		try // (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is,
-		// "UTF-8"));
-	(BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-
-			CSVParser csvParser = new CSVParser(fileReader, CSVFormat.newFormat(';').withFirstRecordAsHeader()
-					.withIgnoreHeaderCase().withTrim().withAllowMissingColumnNames());) {
-
-		List<Programmazione> programmazioni = new ArrayList<Programmazione>();
-			
-		Iterable<CSVRecord> csvRecords = csvParser.getRecords();
-
-		for (CSVRecord csvRecord : csvRecords) {
-			LocalTime time1 = LocalTime.parse(csvRecord.get(2));
-			LocalTime time2 = LocalTime.parse(csvRecord.get(3));
-			LocalTime time3 = LocalTime.parse(csvRecord.get(4));
-			LocalTime Time1 = LocalDateTime.of(LocalDate.now(), time1).atZone(ZoneId.of("Europe/Paris")).toLocalTime();
-
-			LocalTime Time2 = LocalDateTime.of(LocalDate.now(), time2).atZone(ZoneId.of("Europe/Paris")).toLocalTime();
-
-			LocalTime Time3 = LocalDateTime.of(LocalDate.now(), time3).atZone(ZoneId.of("Europe/Paris")).toLocalTime();
-
-			Programmazione programmazione = new Programmazione( csvRecord.get(0),LocalDate.parse(csvRecord.get(1)) ,Time1,Time2,Time3,servF.findById(Long.parseLong(csvRecord.get(5))) ,servS.findById(Long.parseLong(csvRecord.get(6)))
-					
-
-			);
-
-			programmazioni.add(programmazione);
-		}
-
-		return programmazioni;
-	} catch (IOException e) {
-		throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
 	}
 
-}
+	public static    List<Programmazione> csvToProgrammazione(InputStream is) {// InputStream is
+		try // (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is,
+		// "UTF-8"));
+		(BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+
+				CSVParser csvParser = new CSVParser(fileReader, CSVFormat.newFormat(';').withFirstRecordAsHeader()
+						.withIgnoreHeaderCase().withTrim().withAllowMissingColumnNames());) {
+
+			List<Programmazione> programmazioni = new ArrayList<Programmazione>();
+
+			Iterable<CSVRecord> csvRecords = csvParser.getRecords();
+
+			for (CSVRecord csvRecord : csvRecords) {
+
+				LocalTime time1 = LocalTime.parse(csvRecord.get(2));
+				LocalTime time2 = LocalTime.parse(csvRecord.get(3));
+				LocalTime time3 = LocalTime.parse(csvRecord.get(4));
+				LocalTime Time1 = LocalDateTime.of(LocalDate.now(), time1).atZone(ZoneId.of("Europe/Paris"))
+						.toLocalTime();
+
+				LocalTime Time2 = LocalDateTime.of(LocalDate.now(), time2).atZone(ZoneId.of("Europe/Paris"))
+						.toLocalTime();
+
+				LocalTime Time3 = LocalDateTime.of(LocalDate.now(), time3).atZone(ZoneId.of("Europe/Paris"))
+						.toLocalTime();
+
+				Programmazione programmazione = new Programmazione(csvRecord.get(0), LocalDate.parse(csvRecord.get(1)),
+						Time1, Time2, Time3, servF.findById(Long.parseLong(csvRecord.get(5))),
+						servS.findById(Long.parseLong(csvRecord.get(6)))
+
+				);
+
+				programmazioni.add(programmazione);
+			}
+
+			return programmazioni;
+		} catch (IOException e) {
+			throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
+		}
+
+	}
 }
