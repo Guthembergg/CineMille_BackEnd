@@ -71,7 +71,15 @@ public class AuthServiceImpl implements AuthService {
         if(userRepository.existsByEmail(registerDto.getEmail())){
             throw new MyAPIException(HttpStatus.BAD_REQUEST, "Email is already exists!.");
         }
-
+        if(registerDto.getEmail()== ""){
+            throw new MyAPIException(HttpStatus.BAD_REQUEST, "Email cannot be empty.");
+        } 
+        if(registerDto.getUsername()== ""){
+            throw new MyAPIException(HttpStatus.BAD_REQUEST, "Username cannot be empty.");
+        }
+        if(registerDto.getPassword()== ""){
+            throw new MyAPIException(HttpStatus.BAD_REQUEST, "Password cannot be empty.");
+        }
         User user = new User();
         user.setName(registerDto.getName());
         user.setUsername(registerDto.getUsername());
