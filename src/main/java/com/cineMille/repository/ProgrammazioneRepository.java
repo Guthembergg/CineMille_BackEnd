@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.cineMille.model.Film;
 import com.cineMille.model.Programmazione;
+import com.cineMille.model.Sala;
 
 @Repository
 public interface ProgrammazioneRepository extends JpaRepository<Programmazione, Long>, PagingAndSortingRepository<Programmazione, Long> {
@@ -23,4 +24,9 @@ public interface ProgrammazioneRepository extends JpaRepository<Programmazione, 
 	 List<Programmazione> findProgrammazioneByTitolo(String titolo);
 	 @Query("SELECT p FROM Programmazione p WHERE p.film.titolo = :titolo ")
 	 List<Programmazione> findProgrammazioneByTitoloFilm(String titolo);
+	 List<Programmazione> findProgrammazioneByDataAndSala(LocalDate data, Sala sala);
+	 List<Programmazione> findProgrammazioneByDataAndSalaAndOrario1(LocalDate data, Sala sala, LocalTime orario1);
+	 List<Programmazione> findProgrammazioneByDataAndSalaAndOrario2(LocalDate data, Sala sala, LocalTime orario2);
+	 List<Programmazione> findProgrammazioneByDataAndSalaAndOrario3(LocalDate data, Sala sala, LocalTime orario3);
+
 }

@@ -25,8 +25,5 @@ public class ProgrammazioneDto {
 	   
 	    private String orario1 ;
 	
-	    private String orario2;
-	
-	    private String orario3 ;
 	    
 }

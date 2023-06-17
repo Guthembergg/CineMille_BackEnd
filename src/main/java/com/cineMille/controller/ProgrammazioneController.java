@@ -62,7 +62,8 @@ public class ProgrammazioneController {
 		} catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
 		}
-	}	
+	}
+
 	@GetMapping("/titoloFilm/{titolo}")
 	public ResponseEntity<?> trovaProgrammazioneByData(@PathVariable String titolo) {
 		try {
@@ -119,20 +120,21 @@ public class ProgrammazioneController {
 					HttpStatus.BAD_REQUEST);
 		}
 		LocalTime time1 = LocalTime.parse(p.getOrario1());
-		LocalTime time2 = LocalTime.parse(p.getOrario2());
-		LocalTime time3 = LocalTime.parse(p.getOrario3());
 		LocalTime Time1 = LocalDateTime.of(LocalDate.now(), time1).atZone(ZoneId.of("Europe/Paris")).toLocalTime();
+		LocalTime Time2 = Time1.plusHours(2);
 
-		LocalTime Time2 = LocalDateTime.of(LocalDate.now(), time2).atZone(ZoneId.of("Europe/Paris")).toLocalTime();
+		LocalTime Time3 = Time2.plusHours(2);
+		if (service.findAllbyDataAndSala(p.getData(), serviceS.findById(id_sala)).isEmpty()) {
+			try {
 
-		LocalTime Time3 = LocalDateTime.of(LocalDate.now(), time3).atZone(ZoneId.of("Europe/Paris")).toLocalTime();
-
-		try {
-			Programmazione p2 = new Programmazione(p.getTitolo(), p.getData(), Time1, Time2, Time3,
-					serviceF.findById(id_film), serviceS.findById(id_sala));
-			return new ResponseEntity<>(service.addProgrammazione(p2), HttpStatus.CREATED);
-		} catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+				Programmazione p2 = new Programmazione(p.getTitolo(), p.getData(), Time1, Time2, Time3,
+						serviceF.findById(id_film), serviceS.findById(id_sala));
+				return new ResponseEntity<>(service.addProgrammazione(p2), HttpStatus.CREATED);
+			} catch (Exception e) {
+				return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			}
+		} else {
+			return new ResponseEntity<String>("sala occupata in questa data", HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -140,13 +142,12 @@ public class ProgrammazioneController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> modificaProgrammazione(@RequestBody ProgrammazioneDto p, @PathVariable Long id) {
 		LocalTime time1 = LocalTime.parse(p.getOrario1());
-		LocalTime time2 = LocalTime.parse(p.getOrario2());
-		LocalTime time3 = LocalTime.parse(p.getOrario3());
+
 		LocalTime Time1 = LocalDateTime.of(LocalDate.now(), time1).atZone(ZoneId.of("Europe/Paris")).toLocalTime();
+		LocalTime Time2 = Time1.plusHours(2);
 
-		LocalTime Time2 = LocalDateTime.of(LocalDate.now(), time2).atZone(ZoneId.of("Europe/Paris")).toLocalTime();
+		LocalTime Time3 = Time2.plusHours(2);
 
-		LocalTime Time3 = LocalDateTime.of(LocalDate.now(), time3).atZone(ZoneId.of("Europe/Paris")).toLocalTime();
 		try {
 			Programmazione p2 = new Programmazione(id, p.getTitolo(), p.getData(), Time1, Time2, Time3,
 					service.findById(id).getFilm(), service.findById(id).getSala());
@@ -167,21 +168,22 @@ public class ProgrammazioneController {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
 		}
 	}
-	@PostMapping("/upload")	
+
+	@PostMapping("/upload")
 	@PreAuthorize("hasRole('ADMIN')")
-	  public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
-	    String message = "";
+	public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
+		String message = "";
 
-	      try {
-	    	  
-	        service.saveCSV(file);
+		try {
 
-	        message = "Uploaded the file successfully: " + file.getOriginalFilename();
-	        return new ResponseEntity<String>(message, HttpStatus.OK);
-	      
-	      } catch (Exception e) {
-	        return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
-	      }
-	    
+			service.saveCSV(file);
+
+			message = "Uploaded the file successfully: " + file.getOriginalFilename();
+			return new ResponseEntity<String>(message, HttpStatus.OK);
+
+		} catch (Exception e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
+		}
+
 	}
 }

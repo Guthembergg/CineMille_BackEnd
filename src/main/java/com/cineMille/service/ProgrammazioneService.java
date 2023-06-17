@@ -52,17 +52,45 @@ public class ProgrammazioneService {
 		}
 		return repo.findProgrammazioneByTitolo(nome);
 	}
+
 	public List<Programmazione> findByTitoloFilm(String titolo) {
 		if (repo.findProgrammazioneByTitoloFilm(titolo).isEmpty()) {
 			throw new EntityNotFoundException("Nessuna programmazione con questo titolo film");
 		}
 		return repo.findProgrammazioneByTitoloFilm(titolo);
 	}
+	public List<Programmazione> findAllbyDataAndSala(LocalDate data, Sala sala) {
+		if (repo.findProgrammazioneByDataAndSala(data, sala).isEmpty()) {
+			throw new EntityNotFoundException("Nessuna programmazione con questa data e sala e orario1");
+		}
+		return repo.findProgrammazioneByDataAndSala(data, sala);
+	}
 	public List<Programmazione> findAllbyData(LocalDate data) {
 		if (repo.findProgrammazioneByData(data).isEmpty()) {
 			throw new EntityNotFoundException("Nessuna programmazione con questa data");
 		}
 		return repo.findProgrammazioneByData(data);
+	}
+
+	public List<Programmazione> findAllbyDataandSalaAndOrario1(LocalDate data, Sala sala, LocalTime orario1) {
+		if (repo.findProgrammazioneByDataAndSalaAndOrario1(data, sala, orario1).isEmpty()) {
+			throw new EntityNotFoundException("Nessuna programmazione con questa data e sala e orario1");
+		}
+		return repo.findProgrammazioneByDataAndSalaAndOrario2(data, sala, orario1);
+	}
+
+	public List<Programmazione> findAllbyDataandSalaAndOrario2(LocalDate data, Sala sala, LocalTime orario2) {
+		if (repo.findProgrammazioneByDataAndSalaAndOrario2(data, sala, orario2).isEmpty()) {
+			throw new EntityNotFoundException("Nessuna programmazione con questa data e sala e orario2");
+		}
+		return repo.findProgrammazioneByDataAndSalaAndOrario2(data, sala, orario2);
+	}
+
+	public List<Programmazione> findAllbyDataandSalaAndOrario3(LocalDate data, Sala sala, LocalTime orario3) {
+		if (repo.findProgrammazioneByDataAndSalaAndOrario1(data, sala, orario3).isEmpty()) {
+			throw new EntityNotFoundException("Nessuna programmazione con questa data e sala e orario3");
+		}
+		return repo.findProgrammazioneByDataAndSalaAndOrario1(data, sala, orario3);
 	}
 
 	public List<Programmazione> findAllbyOrario1(LocalTime orario) {
