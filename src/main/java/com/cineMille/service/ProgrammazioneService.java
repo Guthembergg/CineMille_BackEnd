@@ -59,6 +59,13 @@ public class ProgrammazioneService {
 		}
 		return repo.findProgrammazioneByTitoloFilm(titolo);
 	}
+	public List<Programmazione> findBySalaId(Long id) {
+		if (repo.findProgrammazioneBySalaId(id).isEmpty()) {
+			throw new EntityNotFoundException("Nessuna programmazione con questa sala");
+		}
+		return repo.findProgrammazioneBySalaId(id);
+	}
+	
 	public List<Programmazione> findAllbyDataAndSala(LocalDate data, Sala sala) {
 		if (repo.findProgrammazioneByDataAndSala(data, sala).isEmpty()) {
 			throw new EntityNotFoundException("Nessuna programmazione con questa data e sala e orario1");

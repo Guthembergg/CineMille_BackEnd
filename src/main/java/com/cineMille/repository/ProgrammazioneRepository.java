@@ -22,6 +22,8 @@ public interface ProgrammazioneRepository extends JpaRepository<Programmazione, 
 	 List<Programmazione> findProgrammazioneByOrario2(LocalTime orario2);
 	 List<Programmazione> findProgrammazioneByOrario3(LocalTime orario3);
 	 List<Programmazione> findProgrammazioneByTitolo(String titolo);
+	 @Query("SELECT p FROM Programmazione p WHERE p.sala.id = :id ")
+	 List<Programmazione> findProgrammazioneBySalaId(Long id);
 	 @Query("SELECT p FROM Programmazione p WHERE p.film.titolo = :titolo ")
 	 List<Programmazione> findProgrammazioneByTitoloFilm(String titolo);
 	 List<Programmazione> findProgrammazioneByDataAndSala(LocalDate data, Sala sala);

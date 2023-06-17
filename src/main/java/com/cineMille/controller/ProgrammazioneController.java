@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.cineMille.model.Film;
 import com.cineMille.model.Programmazione;
 import com.cineMille.model.ProgrammazioneDto;
+import com.cineMille.model.Sala;
 import com.cineMille.service.FilmService;
 import com.cineMille.service.ProgrammazioneService;
 import com.cineMille.service.SalaService;
@@ -55,17 +56,25 @@ public class ProgrammazioneController {
 		}
 	}
 
-	@GetMapping("/data")
-	public ResponseEntity<?> trovaProgrammazioneByData(@RequestBody LocalDate data) {
+	@GetMapping("/data/{data}")
+	public ResponseEntity<?> trovaProgrammazioneByData(@PathVariable String data) {
 		try {
-			return new ResponseEntity<>(service.findAllbyData(data), HttpStatus.OK);
+			return new ResponseEntity<>(service.findAllbyData(LocalDate.parse(data)), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
+		}
+	}@GetMapping("/sala/{sala}")
+	public ResponseEntity<?> trovaProgrammazioneBySala(@PathVariable Long id) {
+		try {
+			return new ResponseEntity<>(service.findBySalaId(id), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
 		}
 	}
 
+
 	@GetMapping("/titoloFilm/{titolo}")
-	public ResponseEntity<?> trovaProgrammazioneByData(@PathVariable String titolo) {
+	public ResponseEntity<?> trovaProgrammazioneByTitoloFilm(@PathVariable String titolo) {
 		try {
 			return new ResponseEntity<>(service.findByTitoloFilm(titolo), HttpStatus.OK);
 		} catch (Exception e) {

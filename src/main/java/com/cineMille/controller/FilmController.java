@@ -99,7 +99,7 @@ public class FilmController {
 		}
 	}
 
-	@PostMapping("/upload")	
+	@PostMapping( "/upload")	
 	@PreAuthorize("hasRole('ADMIN')")
 	  public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
 	    String message = "";
