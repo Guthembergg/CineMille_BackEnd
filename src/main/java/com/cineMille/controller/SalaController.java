@@ -1,6 +1,8 @@
 package com.cineMille.controller;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,9 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cineMille.model.Film;
+import com.cineMille.model.Programmazione;
 import com.cineMille.model.Sala;
 import com.cineMille.model.TipoSala;
 import com.cineMille.service.FilmService;
+import com.cineMille.service.ProgrammazioneService;
 import com.cineMille.service.SalaService;
 
 @CrossOrigin(origins = "*")
@@ -29,6 +33,7 @@ import com.cineMille.service.SalaService;
 @RequestMapping("/sala")
 public class SalaController {
 	@Autowired SalaService service;
+	@Autowired ProgrammazioneService serviceP;
 	
 	@GetMapping
 	public ResponseEntity<?> recuperaALLSala(){
@@ -56,6 +61,20 @@ public class SalaController {
 		try {
 			return new ResponseEntity<>(service.findSalabyTipo(TipoSala.valueOf(tipo)), HttpStatus.OK);
 		} catch(Exception e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
+		}
+	}
+	
+	@GetMapping("/data/{data}")
+	public ResponseEntity<?> trovaSalaDisponibileByData(@PathVariable String data) {
+		try {	
+			List<Programmazione> p = serviceP.findAllbyData(LocalDate.parse(data));
+			List<Sala> s = new ArrayList<>();
+			p.forEach((e)->s.add(e.getSala()) );
+			List<Sala> s2 = service.findAllSala();
+			 s2.removeAll(s);
+			return new ResponseEntity<>(s2, HttpStatus.OK);
+		} catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
 		}
 	}

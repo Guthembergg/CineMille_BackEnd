@@ -63,7 +63,10 @@ public class ProgrammazioneController {
 		} catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
 		}
-	}@GetMapping("/sala/{sala}")
+	}
+	
+	
+	@GetMapping("/sala/{sala}")
 	public ResponseEntity<?> trovaProgrammazioneBySala(@PathVariable Long id) {
 		try {
 			return new ResponseEntity<>(service.findBySalaId(id), HttpStatus.OK);
