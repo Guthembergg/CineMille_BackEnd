@@ -45,10 +45,10 @@ public class Programmazione {
     
  
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JsonIgnore
+ 
     private Film film;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JsonIgnore
+  
     private Sala sala;
 	public Programmazione(String titolo, LocalDate data, LocalTime orario1, LocalTime orario2,
 			LocalTime orario3, Film film, Sala sala) {
