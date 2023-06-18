@@ -129,7 +129,7 @@ public class ProgrammazioneController {
 		LocalDate data_programma = p.getData();
 		if (data_uscita.datesUntil(data_programma).count() > 22 || data_uscita.datesUntil(data_programma).count() < 7) {
 			return new ResponseEntity<String>("Data fuori programma rispetto alla data di uscita del film",
-					HttpStatus.BAD_REQUEST);
+					HttpStatus.FAILED_DEPENDENCY);
 		}
 		LocalTime time1 = LocalTime.parse(p.getOrario1());
 		LocalTime Time1 = LocalDateTime.of(LocalDate.now(), time1).atZone(ZoneId.of("Europe/Paris")).toLocalTime();

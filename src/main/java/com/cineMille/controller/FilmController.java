@@ -60,6 +60,7 @@ public class FilmController {
 		}
 	}
 	@GetMapping("/disponibile")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> trovaFilmDisponibili(){
 		try {
 			  LocalDate oggi= LocalDate.now();
@@ -68,8 +69,6 @@ public class FilmController {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
 		}
 	}
-
-	
 
 	
 	
