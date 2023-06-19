@@ -1,5 +1,9 @@
 package com.cineMille.runner;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -10,6 +14,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cineMille.auth.entity.ERole;
 import com.cineMille.auth.entity.Role;
@@ -20,7 +25,10 @@ import com.cineMille.auth.service.AuthService;
 import com.cineMille.auth.service.AuthServiceImpl;
 import com.cineMille.model.Sala;
 import com.cineMille.model.TipoSala;
+import com.cineMille.service.FilmService;
+import com.cineMille.service.ProgrammazioneService;
 import com.cineMille.service.SalaService;
+import io.jsonwebtoken.io.IOException;
 
 @Component
 public class SalaRunner implements ApplicationRunner {
@@ -30,6 +38,7 @@ public class SalaRunner implements ApplicationRunner {
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 
+		
 		if (serv.findAllSala().isEmpty()) {
 			System.out.println("Sala Runner...");
 			List<Sala> sale = new ArrayList<Sala>();
@@ -59,6 +68,7 @@ public class SalaRunner implements ApplicationRunner {
 			sale.add(s12);
 			serv.addAllSala(sale);
 		}
-	}
-
+		
+		
+}
 }
