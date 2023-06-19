@@ -6,3 +6,5 @@ E' inoltre possbile modificare, cancellare e ricercare film per titolo o data co
 Si possono modificare, cancellare e ricercare le sale per l'id, tipologia o il nome.
 Si possono modificare, cancellare e ricercare le programmazioni per id, nome, data , orari o titolo del film.
 All'avvio viene riempita la tabella degli ruoli degli user (user, mod, admin), viene creato uno User admin con username: mario e psw: qwerty, inoltre vengono create 12 sale di vario tipo.
+
+Link front-end: https://github.com/Guthembergg/cinemille-frontend
