@@ -71,9 +71,7 @@ public class ProgrammazioneService {
 		return repo.findProgrammazioneByDataAndSala(data, sala);
 	}
 	public List<Programmazione> findAllbyData(LocalDate data) {
-		if (repo.findProgrammazioneByData(data).isEmpty()) {
-			throw new EntityNotFoundException("Nessuna programmazione con questa data");
-		}
+	
 		return repo.findProgrammazioneByData(data);
 	}
 

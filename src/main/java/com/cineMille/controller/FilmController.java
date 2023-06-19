@@ -2,6 +2,8 @@ package com.cineMille.controller;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -59,18 +61,32 @@ public class FilmController {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
 		}
 	}
-	@GetMapping("/disponibile")
+//	@GetMapping("/disponibile")
+//	@PreAuthorize("hasRole('ADMIN')")
+//	public ResponseEntity<?> trovaFilmDisponibili(){
+//		try {
+//			  LocalDate oggi= LocalDate.now();
+//			return new ResponseEntity<>(service.getAllFilmDisponibili(oggi.plusDays(7), oggi.plusDays(22)), HttpStatus.OK);
+//		} catch(Exception e) {
+//			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
+//		}
+//	}
+
+	@GetMapping("/disponibile/{data}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<?> trovaFilmDisponibili(){
+	public ResponseEntity<?> trovaFilmDisponibiliData(@PathVariable LocalDate data){
 		try {
-			  LocalDate oggi= LocalDate.now();
-			return new ResponseEntity<>(service.getAllFilmDisponibili(oggi.plusDays(7), oggi.plusDays(22)), HttpStatus.OK);
+			
+			List<Film> f= service.findAllFilm();
+			List<Film>f1 = new ArrayList<>();
+			f.forEach( e-> {if( e.getDatauscita().datesUntil(data).count() > 7 && e.getDatauscita().datesUntil(data).count() < 22)  { f1.add(e);}});
+			
+			return new ResponseEntity<>(f1, HttpStatus.OK);
 		} catch(Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.FOUND);
 		}
 	}
 
-	
 	
 	@PostMapping()
 	@PreAuthorize("hasRole('ADMIN')")
