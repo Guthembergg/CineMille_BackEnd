@@ -79,7 +79,14 @@ public class FilmController {
 			
 			List<Film> f= service.findAllFilm();
 			List<Film>f1 = new ArrayList<>();
-			f.forEach( e-> {if( e.getDatauscita().datesUntil(data).count() > 7 && e.getDatauscita().datesUntil(data).count() < 22)  { f1.add(e);}});
+		
+
+			try {
+			 // Your code...
+				f.forEach( e-> {if( e.getDatauscita().datesUntil(data).count() > 7 && e.getDatauscita().datesUntil(data).count() < 22)  { f1.add(e);}});
+
+			} catch (Exception ignore) { }
+			
 			
 			return new ResponseEntity<>(f1, HttpStatus.OK);
 		} catch(Exception e) {
